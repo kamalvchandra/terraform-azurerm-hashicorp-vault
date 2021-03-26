@@ -4,6 +4,14 @@ variable "resource_group_name"{
   type        = string
 }
 
+variable "key_vault_managers" {
+  description = "Azure identities/groups to be granted management access to Azure Key Vault (leave empty for object_id running terraform)"
+  type        = map(object({
+                  tenant_id = string
+                  object_id = string }))
+  default     = null
+}
+
 variable "location" {
   description = "Azure Region"
   type        = string
