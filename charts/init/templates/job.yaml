@@ -18,7 +18,7 @@ spec:
       containers:
         - name: vault-init-job
         {{- if .Values.private_docker_repo }}
-          image: {{ .Values.private_docker_repo}}/python:3.8.2-slim-buster
+          image: {{ .Values.private_docker_repo}}/broadinstitute/python-requests:latest
         {{ else }}
           image: "python:3.8.2-slim-buster"
         {{- end }}
