@@ -169,6 +169,8 @@ resource "helm_release" "vault" {
       enable_audit_storage     = var.vault_enable_audit_storage
       audit_storage_class      = var.vault_data_storage_class
       audit_storage_size       = var.vault_data_storage_size
+      private_docker_repo      = var.private_docker_repo
+      image_pull_secret        = var.image_pull_secret
     }),
     var.additional_yaml_config
   ]
@@ -193,5 +195,7 @@ resource "helm_release" "vault_init" {
     "azureKeyVaultSecretUrl"  = "${azurerm_key_vault.kv.vault_uri}secrets/${azurerm_key_vault_secret.vault_init.name}",
     "identityName"            = azurerm_user_assigned_identity.vault_init.name
     "nodeSelector"            = (length(var.kubernetes_node_selector) > 0 ? chomp(yamlencode(var.kubernetes_node_selector)) : "")
+    "image_pull_secret"       = var.image_pull_secret
+    "private_docker_repo"     = var.private_docker_repo
   })]
 }

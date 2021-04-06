@@ -160,3 +160,15 @@ variable "additional_yaml_config" {
   type        = string
   default     = ""
 }
+
+variable "private_docker_repo" {
+  description = "Private docker repo to pull containers from, generally needed for cluster without internet"
+  type        = string
+  default     = ""
+}
+
+variable "image_pull_secret" {
+  description = "Name of secret to be used with private docker repo"
+  type        = string
+  default     = ""
+}

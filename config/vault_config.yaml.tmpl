@@ -1,5 +1,13 @@
+%{ if image_pull_secret != "" ~}
+global:
+  imagePullSecrets:
+  - name: ${image_pull_secret}
+%{ endif ~}
 server:
   image:
+%{if private_docker_repo != "" ~}
+    repository: ${private_docker_repo}/vault
+%{ endif ~}
     tag: ${vault_version}
 %{ if node_selector != "" ~}
   nodeSelector: |
@@ -100,6 +108,12 @@ injector:
     ${node_selector}
 %{ endif ~}
   image:
+%{if private_docker_repo != "" ~}
+    repository: ${private_docker_repo}/hashicorp/vault-k8s
+%{ endif ~}
     tag: ${injector_version}
   agentImage:
+%{if private_docker_repo != "" ~}
+    repository: ${private_docker_repo}/vault
+%{ endif ~}
     tag: ${injector_sidecar_version}

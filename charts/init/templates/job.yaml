@@ -10,15 +10,26 @@ spec:
       labels:
         aadpodidbinding: {{ .Values.identityName }}
     spec:
+    {{- if .Values.image_pull_secret }}
+      imagePullSecrets:
+      - name: {{ .Values.image_pull_secret }}
+    {{- end }}
       restartPolicy: Never
       containers:
         - name: vault-init-job
+        {{- if .Values.private_docker_repo }}
+          image: {{ .Values.private_docker_repo}}/python:3.8.2-slim-buster
+        {{ else }}
           image: "python:3.8.2-slim-buster"
+        {{- end }}
           command: ["/usr/local/bin/python", "-c", {{ (tpl (.Files.Get "scripts/vault-init.py") . | quote ) }} ]
       initContainers:
         - name: wait-for-vault
+        {{- if .Values.private_docker_repo }}
+          image: {{ .Values.private_docker_repo}}/busybox:1.28
+        {{ else }}
           image: busybox:1.28
+        {{- end }}
           command: ['sh', '-c', "until nslookup vault-0.vault-internal; do echo waiting for vault-0 to be Running; sleep 2; done"]
       nodeSelector: {{- if .Values.nodeSelector }}
 {{ .Values.nodeSelector | indent 8 }}{{- end }}
-      

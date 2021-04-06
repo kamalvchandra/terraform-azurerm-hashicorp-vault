@@ -1,4 +1,6 @@
 azureKeyVaultSecretTags: ""
 azureKeyVaultSecretUrl: ""
 identityName: ""
-nodeSelector:
+nodeSelector: ""
+image_pull_secret: ""
+private_docker_repo: ""
