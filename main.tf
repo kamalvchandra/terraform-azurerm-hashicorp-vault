@@ -141,7 +141,9 @@ resource "helm_release" "vault" {
   depends_on = [module.vault_identity]
 
   name      = "vault"
-  chart     = "https://github.com/hashicorp/vault-helm/archive/v${var.vault_helm_chart_version}.tar.gz"
+  repository                       = "https://helm.releases.hashicorp.com"
+  chart                            = "vault"
+  version                          = "0.19.0"
 
   namespace        = var.kubernetes_namespace
   create_namespace = true
