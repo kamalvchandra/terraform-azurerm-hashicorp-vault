@@ -40,11 +40,23 @@ variable "key_vault_managers" {
   default     = null
 }
 
+variable "subscription_id" {
+  description = "ID of the current subscription"
+  type        = string
+  default     = ""
+}
+
 # AAD
 variable "identity_name" {
   description = "name for Azure identity to be used by AAD"
   type        = string
   default     = "aks-aad"
+}
+
+variable "group_identity" {
+  description = "TFE Group ID"
+  type        = string
+  default     = ""
 }
 
 variable "vault_helm_chart_version" {

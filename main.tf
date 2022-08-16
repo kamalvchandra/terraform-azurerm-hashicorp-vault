@@ -4,6 +4,12 @@ resource "random_string"  "kv" {
   special = false
 }
 
+resource "azurerm_role_assignment" "key-vault-contributor" {
+  scope                            = "/subscriptions/${var.subscription_id}"
+  role_definition_name             = "Key Vault Administrator"
+  principal_id                     = var.group_identity
+}
+
 resource "azurerm_key_vault" "kv" {
   name                 = "${var.names.product_group}${var.names.subscription_type}hcv${random_string.kv.result}" 
   location             = var.location
@@ -14,6 +20,7 @@ resource "azurerm_key_vault" "kv" {
 
   purge_protection_enabled = false
   soft_delete_enabled      = true
+  enable_rbac_authorization = true
 
   network_acls {
     default_action = "Allow"
@@ -89,11 +96,23 @@ resource "azurerm_user_assigned_identity" "vault" {
   tags                 = var.tags
 }
 
+resource "azurerm_role_assignment" "key-vault-contributor-vault" {
+  scope                            = "/subscriptions/${var.subscription_id}"
+  role_definition_name             = "Key Vault Administrator"
+  principal_id                     = azurerm_user_assigned_identity.vault.principal_id
+}
+
 resource "azurerm_user_assigned_identity" "vault_init" {
   name                 = "${var.names.product_group}-${var.names.subscription_type}-vault-init"
   location             = var.location
   resource_group_name  = var.resource_group_name
   tags                 = var.tags
+}
+
+resource "azurerm_role_assignment" "key-vault-contributor-vault-init" {
+  scope                            = "/subscriptions/${var.subscription_id}"
+  role_definition_name             = "Key Vault Administrator"
+  principal_id                     = azurerm_user_assigned_identity.vault_init.principal_id
 }
 
 resource "azurerm_key_vault_access_policy" "vault" {
