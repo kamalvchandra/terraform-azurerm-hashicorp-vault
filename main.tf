@@ -4,11 +4,11 @@ resource "random_string"  "kv" {
   special = false
 }
 
-resource "azurerm_role_assignment" "key-vault-contributor" {
-  scope                            = "/subscriptions/${var.subscription_id}"
-  role_definition_name             = "Key Vault Administrator"
-  principal_id                     = var.group_identity
-}
+#resource "azurerm_role_assignment" "key-vault-contributor" {
+#  scope                            = "/subscriptions/${var.subscription_id}"
+#  role_definition_name             = "Key Vault Administrator"
+#  principal_id                     = var.group_identity
+#}
 
 resource "azurerm_key_vault" "kv" {
   name                 = "${var.names.product_group}${var.names.subscription_type}hcv${random_string.kv.result}" 
